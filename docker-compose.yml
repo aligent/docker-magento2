@@ -88,7 +88,9 @@ services:
     build:
       context: 7.0-cli/
     hostname: magento2-cron.docker
-    command: run-cron
+#    command: run-cron
+#disabled cron for now
+    command: "bash"
     environment:
       - ENABLE_SENDMAIL=true
     volumes_from:
@@ -99,7 +101,7 @@ services:
   appdata:
     image: tianon/true
     volumes:
-      - ./magento:/var/www/magento
+      - ./magento/magento:/var/www/magento
 
   dbdata:
     image: tianon/true
