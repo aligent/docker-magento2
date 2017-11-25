@@ -61,7 +61,7 @@ services:
     links:
       - db
     volumes:
-      - ~/.composer/cache:/root/.composer/cache
+      - ./volume/composer:/root/.composer
     volumes_from:
       - appdata
     #temp work around so we do not need to create container for every command
