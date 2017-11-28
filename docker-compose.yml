@@ -108,4 +108,4 @@ services:
   dbdata:
     image: tianon/true
     volumes:
-      - /var/lib/mysql
+      - ./volume/mysql:/var/lib/mysql
