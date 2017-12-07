@@ -38,5 +38,6 @@ RUN ["chmod", "+x", "/usr/local/bin/magento-installer"]
 RUN ["chmod", "+x", "/usr/local/bin/magento-command"]
 RUN ["chmod", "+x", "/usr/local/bin/magerun2"]
 RUN ["chmod", "+x", "/usr/local/bin/run-cron"]
-
+RUN apt-get install vim -y
+RUN echo "cd /var/www/magento" >> /root/.bashrc
 CMD ["bash"]
