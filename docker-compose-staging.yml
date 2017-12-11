@@ -23,7 +23,7 @@ services:
     volumes_from:
       - appdata
     env_file:
-      - ./global.env
+      - ./staging.env
     #environment:
       #- VIRTUAL_HOST=magento2.docker
       #- VIRTUAL_PORT=80
@@ -40,7 +40,7 @@ services:
     volumes_from:
       - appdata
     env_file:
-      - ./global.env
+      - ./staging.env
 
 #  db:
 #    image: mariadb:10
@@ -67,7 +67,7 @@ services:
     #temp work around so we do not need to create container for every command
     entrypoint: "sleep infinity"
     env_file:
-      - ./global.env
+      - ./staging.env
       - ./composer.env
     environment:
       - M2SETUP_INSTALL_DB=true
