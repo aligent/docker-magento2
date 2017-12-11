@@ -16,10 +16,10 @@ services:
     build:
       context: nginx/
     ports:
-      - 80
+      - "80:80"
     links:
       - fpm
-      - db
+#      - db
     volumes_from:
       - appdata
     env_file:
@@ -35,31 +35,31 @@ services:
       context: 7.0-fpm/
     ports:
       - 9000
-    links:
-      - db
+#    links:
+#      - db
     volumes_from:
       - appdata
     env_file:
       - ./global.env
 
-  db:
-    image: mariadb:10
-    ports:
-      - 3306
-    volumes_from:
-      - dbdata
-    environment:
-      - MYSQL_ROOT_PASSWORD=magento2
-      - MYSQL_DATABASE=magento2
-      - MYSQL_USER=magento2
-      - MYSQL_PASSWORD=magento2
+#  db:
+#    image: mariadb:10
+#    ports:
+#      - 3306
+#    volumes_from:
+#      - dbdata
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=magento2
+#      - MYSQL_DATABASE=magento2
+#      - MYSQL_USER=magento2
+#      - MYSQL_PASSWORD=magento2
 
   cli:
     hostname: cli.magento2.docker
     build:
       context: 7.0-cli/
-    links:
-      - db
+#    links:
+#      - db
     volumes:
       - ./volume/composer:/root/.composer
     volumes_from:
@@ -97,15 +97,15 @@ services:
       - ENABLE_SENDMAIL=true
     volumes_from:
       - appdata
-    links:
-      - db
+#    links:
+#      - db
 
   appdata:
     image: tianon/true
     volumes:
       - ./magento/magento:/var/www/magento
 
-  dbdata:
-    image: tianon/true
-    volumes:
-      - ./volume/mysql:/var/lib/mysql
+#  dbdata:
+#    image: tianon/true
+#    volumes:
+#      - ./volume/mysql:/var/lib/mysql
