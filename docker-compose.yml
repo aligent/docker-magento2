@@ -65,7 +65,7 @@ services:
     volumes_from:
       - appdata
     #temp work around so we do not need to create container for every command
-    entrypoint: "sleep infinity"
+    entrypoint: 'bash -c "/docker-entrypoint.sh && sleep infinity"'
     env_file:
       - ./global.env
       - ./composer.env
