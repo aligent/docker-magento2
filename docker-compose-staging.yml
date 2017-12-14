@@ -99,7 +99,10 @@ services:
       - appdata
 #    links:
 #      - db
-
+  m2_cache:
+      image: redis
+  m2_session:
+      image: redis
   appdata:
     image: tianon/true
     volumes:
