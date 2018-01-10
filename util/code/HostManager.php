@@ -6,13 +6,14 @@ require_once __DIR__ . '/Common.php';
 
 class HostManager
 {
-    protected $_vHostName;
+    protected $_aHostServiceMap;
+    protected $_aHostIpMap;
+    protected $_aLegacyHosts;
     protected $_vHostId;
     protected $_aInitialConfig = [];
-    protected $_oDockerIp;
     protected $_vStatePath;
-    const SNIPPET_START = '#--- docker-host-{host_id}--start';
-    const SNIPPET_END = '#--- docker-host-{host_id}--end';
+    const SNIPPET_START = '#--- docker-host {host_id}  {host_path}  start --/';
+    const SNIPPET_END = '#--- docker-host {host_id}  {host_path}  end   --/';
 
     public function __construct($aConfig)
     {
@@ -32,7 +33,6 @@ class HostManager
         if (!$this->_vStatePath) {
             $this->_vStatePath = sys_get_temp_dir() . '/docker_mean_bea.json';
         }
-        $this->_oDockerIp = new DockerIp();
     }
 
     protected function getExistingSnippet()
@@ -44,7 +44,12 @@ class HostManager
     protected function getHostsPath()
     {
         return '/etc/hosts';
-//        return dirname(dirname(__DIR__)) . '/hosts';
+        //for testing without modifying root file
+//        $vHosts =  dirname(dirname(__DIR__)) . '/hosts';
+//        if (!file_exists($vHosts)){
+//            copy('/etc/hosts',$vHosts);
+//        }
+//        return $vHosts;
     }
 
     protected function canModify()
@@ -54,19 +59,33 @@ class HostManager
 
     protected function getNewSnippetContent()
     {
+        $vHostIpMap = '';
+        foreach ($this->getHostIpMap() as $vHost => $vIp) {
+            $vHostIpMap .=  $vIp.  "  "  . $vHost . "\n" ;
+        }
         return $this->getSnippetStart() .
-            $this->_oDockerIp->getDockerIp() . "   " . $this->_vHostName .
+            $vHostIpMap .
             $this->getSnippetEnd();
+    }
+    protected function getHostIpMap()
+    {
+        if (is_null($this->_aHostIpMap)){
+            foreach ($this->_aHostServiceMap as $vHost => $vService) {
+                $oIp = new DockerIp($vService);
+                $this->_aHostIpMap[$vHost] = $oIp->getDockerIp();
+            }
+        }
+        return $this->_aHostIpMap;
     }
 
     protected function getSnippetStart()
     {
-        return "\n" . str_replace('{host_id}', $this->_vHostId, self::SNIPPET_START) . "\n";
+        return "\n" . str_replace(['{host_id}','{host_path}'], [$this->_vHostId,dirname(dirname(__DIR__))], self::SNIPPET_START)  . "\n\n";
     }
 
     protected function getSnippetEnd()
     {
-        return "\n" . str_replace('{host_id}', $this->_vHostId, self::SNIPPET_END) . "\n";
+        return "\n" . str_replace(['{host_id}','{host_path}'], [$this->_vHostId,dirname(dirname(__DIR__))], self::SNIPPET_END) . "\n";
     }
 
     protected function appendSnippet()
@@ -89,7 +108,9 @@ class HostManager
          if (file_exists($vNeedsSudo)) {
             unlink($vNeedsSudo);
         }
+        //need to write because of snippet incorrect or no legacy entry found (so new entry)
         if ($this->needToWrite()) {
+            echo "need to modify hosts file \n";
             if ($this->canModify()) {
                 if ($this->needToReplace()) {
                     $this->replaceSnippet();
@@ -97,6 +118,7 @@ class HostManager
                 else {
                     $this->appendSnippet();
                 }
+                echo $this->getHostsPath() .  " entry updated \n";
             }
             else {
                 //need to write and need sudo
@@ -104,28 +126,33 @@ class HostManager
                 touch($vNeedsSudo);
             }
         }
-        //will not write
+        //will not write either because snippet is same or legacy entry found so no clear logic to replace them
         else{
-            if (!$this->getExistingSnippet()){
-                echo "please remove existing entry of {$this->_vHostName} in " . $this->getHostsPath() . "\n";
+            if ($this->getExistingSnippet()) {
+                echo $this->getHostsPath() .  " entry already present and is correct \n";
+            } else{
+                $vPresentHost = $this->legacyHostEntryPresent();
+                echo "please remove existing entry of {$vPresentHost} in " . $this->getHostsPath() . "\n";
             }
         }
     }
 
     protected function needToWrite()
     {
-        return $this->needToReplace() || $this->hostsEntryMissing();
+        return $this->needToReplace() || !$this->legacyHostEntryPresent();
     }
 
-    protected function hostsEntryMissing()
+    protected function legacyHostEntryPresent()
     {
-        $iPos = strpos($this->getHostsContent(), $this->_vHostName);
-        if ($iPos === false) {
-            return true;
+        $vHostContents = $this->getHostsContent();
+        foreach ($this->_aLegacyHosts as $vHostSnippet) {
+            $iPos = strpos($vHostContents, $vHostSnippet);
+            //host entry found
+            if ($iPos !== false) {
+                return $vHostSnippet;
+            }
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     protected function needToReplace()

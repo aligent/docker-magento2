@@ -4,15 +4,17 @@
 class DockerIp
 {
     protected $_dockerName;
-    public function __construct()
+    protected $_vServiceName;
+    public function __construct($vServiceName)
     {
+        $this->_vServiceName = $vServiceName;
         $this->_dockerName = $this->getDockerName();
     }
     protected function getDockerName()
     {
         $vBaseName =  basename(dirname(dirname(__DIR__)));
         $vBaseName = str_replace('_','',$vBaseName);
-        $vDockerName = $vBaseName . '_web_1';
+        $vDockerName = $vBaseName . "_{$this->_vServiceName}_1";
         return $vDockerName;
     }
     public function getDockerIp()
