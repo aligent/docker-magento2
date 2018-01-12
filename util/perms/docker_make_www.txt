@@ -2,6 +2,7 @@ docker-compose exec cli bash
 cd /var/www/magento
 chown  www-data:www-data vendor -R
 chown  www-data:www-data var -R
+chown  www-data:www-data generated -R
 chown  www-data:www-data pub/static -R
 chown  www-data:www-data update -R
 
