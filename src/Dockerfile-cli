@@ -39,5 +39,8 @@ RUN ["chmod", "+x", "/usr/local/bin/magento-command"]
 RUN ["chmod", "+x", "/usr/local/bin/magerun2"]
 RUN ["chmod", "+x", "/usr/local/bin/run-cron"]
 RUN apt-get install vim -y
+RUN apt-get install node npm -y
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN npm install --global gulp
 RUN echo "cd /var/www/magento" >> /root/.bashrc
 CMD ["bash"]
