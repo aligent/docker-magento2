@@ -89,8 +89,10 @@ RUN ["chmod", "+x", "/usr/local/bin/magento-command"]
 RUN ["chmod", "+x", "/usr/local/bin/magerun2"]
 RUN ["chmod", "+x", "/usr/local/bin/run-cron"]
 RUN apt-get install vim -y
-RUN apt-get install node npm -y
-RUN ln -s /usr/bin/nodejs /usr/bin/node
-RUN npm install --global gulp
+RUN apt-get install nodejs-legacy  -y
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh |bash
+RUN /bin/bash -c "chmod a+x /root/.nvm/nvm.sh"
+RUN /bin/bash -c "source /root/.bashrc && nvm install node"
+RUN /bin/bash -c "source /root/.bashrc && npm install --global gulp"
 RUN echo "cd /var/www/magento" >> /root/.bashrc
 CMD ["bash"]
