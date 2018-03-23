@@ -44,5 +44,6 @@ RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh
 RUN /bin/bash -c "chmod a+x /root/.nvm/nvm.sh"
 RUN /bin/bash -c "source /root/.bashrc && nvm install node"
 RUN /bin/bash -c "source /root/.bashrc && npm install --global gulp"
+RUN composer global require hirak/prestissimo
 RUN echo "cd /var/www/magento" >> /root/.bashrc
 CMD ["bash"]
