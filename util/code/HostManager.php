@@ -145,6 +145,7 @@ class HostManager
     protected function legacyHostEntryPresent()
     {
         $vHostContents = $this->getHostsContent();
+        $this->_aLegacyHosts = $this->_aLegacyHosts ?: [];
         foreach ($this->_aLegacyHosts as $vHostSnippet) {
             $iPos = strpos($vHostContents, $vHostSnippet);
             //host entry found
