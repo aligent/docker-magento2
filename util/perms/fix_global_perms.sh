@@ -13,5 +13,5 @@ then
     echo "Nothing to chown"
 else
    echo "changing in the batches of 1000"
-   sudo find "$TARGET_FOLDER"  ! -user "$USER"  ! -path "$TARGET_FOLDER/vendor*" ! -path "$TARGET_FOLDER/update*" ! -path "$TARGET_FOLDER/pub/static*" ! -path "$TARGET_FOLDER/var*" -print | head -1000 | xargs  sudo chown "$USER"
+   find "$TARGET_FOLDER"  ! -user "$USER"  ! -path "$TARGET_FOLDER/vendor*" ! -path "$TARGET_FOLDER/update*" ! -path "$TARGET_FOLDER/pub/static*" ! -path "$TARGET_FOLDER/var*" -print0  | xargs -0 -n 1000 sudo chown "$USER"
 fi
