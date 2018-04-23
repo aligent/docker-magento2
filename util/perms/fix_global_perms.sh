@@ -15,3 +15,5 @@ else
    echo "changing in the batches of 1000"
    find "$TARGET_FOLDER"  ! -user "$USER"  ! -path "$TARGET_FOLDER/vendor*" ! -path "$TARGET_FOLDER/update*" ! -path "$TARGET_FOLDER/pub/static*" ! -path "$TARGET_FOLDER/var*" -print0  | xargs -0 -n 1000 sudo chown "$USER"
 fi
+
+echo "This script should no longer be needed, only for historic purposes"

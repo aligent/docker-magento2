@@ -7,3 +7,5 @@ ls -la "$TARGET_FOLDER" | grep magento
 #need permission of
 sudo chown "$USER":"$USER" "$TARGET_FOLDER/magento"
 ls -la "$TARGET_FOLDER" | grep magento
+
+echo "This script should no longer be needed, only for historic purposes"
