@@ -59,6 +59,8 @@ RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
+RUN apt-get install vim -y
+RUN docker-php-ext-install mysqli
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_GITHUB_TOKEN ""
 ENV COMPOSER_MAGENTO_USERNAME ""
@@ -88,7 +90,6 @@ RUN ["chmod", "+x", "/usr/local/bin/magento-installer"]
 RUN ["chmod", "+x", "/usr/local/bin/magento-command"]
 RUN ["chmod", "+x", "/usr/local/bin/magerun2"]
 RUN ["chmod", "+x", "/usr/local/bin/run-cron"]
-RUN apt-get install vim -y
 RUN apt-get install nodejs-legacy  -y
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh |bash
 RUN /bin/bash -c "chmod a+x /root/.nvm/nvm.sh"

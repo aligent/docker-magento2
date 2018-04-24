@@ -55,6 +55,8 @@ RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
+RUN apt-get install vim -y
+RUN docker-php-ext-install mysqli
 ENV MAGENTO_RUN_MODE developer
 ENV UPLOAD_MAX_FILESIZE 64M
 
@@ -62,6 +64,5 @@ ADD etc/php-fpm.ini /usr/local/etc/php/conf.d/zz-magento.ini
 
 ADD etc/php-fpm.conf /usr/local/etc/
 
-RUN apt-get install vim -y
 
 CMD ["php-fpm", "-F"]
