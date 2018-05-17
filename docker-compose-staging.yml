@@ -93,8 +93,8 @@ services:
 #    command: run-cron
 #disabled cron for now
     command: "bash"
-    environment:
-      - ENABLE_SENDMAIL=true
+    env_file:
+        - ./global.env
     volumes_from:
       - appdata
 #    links:
