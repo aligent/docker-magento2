@@ -18,5 +18,10 @@ else{
         '_vHostId'   => 'magento2-aligent',
     ];
 }
-$oHostManager = new HostManager($aConfig);
-$oHostManager->process();
+if (empty($bDoNotRun)){
+    $oHostManager = new HostManager($aConfig);
+    $oHostManager->process();
+}
+else{
+    return $aConfig;
+}
