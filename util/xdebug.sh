@@ -17,6 +17,6 @@ do
   PARAMS="${PARAMS} \"${PARAM}\""
 done
 
-COMMAND="cd /var/www/magento && export PHP_IDE_CONFIG=\"serverName=$hostname\" && php -dxdebug.remote_enable=1 -dxdebug.remote_autostart=1 -dxdebug.remote_host=`/sbin/ip route|awk '/default/ { print $3}'`  $PARAMS";
+COMMAND="cd /var/www/magento && export PHP_IDE_CONFIG=\"serverName=$hostname\" && php -dxdebug.remote_enable=1 -dxdebug.remote_autostart=1 -dxdebug.remote_host=\`/sbin/ip route|awk '/default/ { print \$3}'\`  $PARAMS";
 #echo "$COMMAND";
-docker-compose exec cli sudo -u www-data bash -c "$COMMAND"
+docker-compose exec cli bash -c "$COMMAND"
