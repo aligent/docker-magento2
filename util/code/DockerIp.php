@@ -13,7 +13,8 @@ class DockerIp
     protected function getDockerName()
     {
         $vBaseName =  basename(dirname(dirname(__DIR__)));
-        $vBaseName = str_replace('_','',$vBaseName);
+        //TODO: investigate why _ is part of name in same cases mf_docker but not in other
+//        $vBaseName = str_replace('_','',$vBaseName);
         $vDockerName = $vBaseName . "_{$this->_vServiceName}_1";
         return $vDockerName;
     }
