@@ -63,3 +63,5 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 
 RUN apt-get install vim -y
 RUN docker-php-ext-install mysqli
+RUN docker-php-ext-configure opcache --enable-opcache \
+    && docker-php-ext-install opcache
